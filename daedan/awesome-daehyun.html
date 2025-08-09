@@ -29,9 +29,31 @@
     .container{max-width:860px;margin:0 auto;padding:24px}
     header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:18px 0 8px}
     .brand{display:flex;align-items:center;gap:12px}
-    .logo{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),#fb7185);color:#fff;box-shadow:var(--shadow);position:relative;overflow:hidden}
+/* Responsive star badge */
+.logo{
+  /* scale between 40–64px based on viewport width */
+  width: clamp(40px, 9vw, 64px);
+  aspect-ratio: 1 / 1;              /* always a square */
+  border-radius: clamp(10px, 2vw, 14px);
+
+  display: grid;
+  place-items: center;
+
+  background: linear-gradient(135deg,var(--accent),#fb7185);
+  color: #fff;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+
+  flex-shrink: 0;                    /* ❗ prevent flex from squishing it */
+}
+
+.logo span{
+  /* emoji scales with the box */
+  font-size: clamp(22px, 5vw, 36px);
+  line-height: 1;                    /* avoid vertical squish */
+}
     .logo::after{content:"";position:absolute;inset:-30% -30%;background:radial-gradient(300px 200px at 30% 30%,rgba(255,255,255,.25),transparent 55%);transform:rotate(15deg)}
-    .logo span{font-size:26px}
     h1{margin:0;font-size:clamp(22px,4vw,34px);letter-spacing:-.02em}
     .sub{color:var(--muted);font-size:14px;margin-top:4px}
     .toolbar{display:flex;flex-wrap:wrap;gap:10px}
@@ -82,12 +104,7 @@
 
 
 
-    /* 모바일: 첫 화면에서 오늘의 문장 우선 표시 */
-    .mobile-only{display:none}
-    @media (max-width:640px){
-      #loveList.collapsed{display:none}
-      .mobile-only{display:inline-block}
-    }
+
 
     @media print{body{background:#fff}.toolbar,.logo::after{display:none!important}.card{box-shadow:none}button{display:none}.footer{display:none}}
   </style>
@@ -103,8 +120,6 @@
         </div>
       </div>
       <div class="toolbar">
-        <button id="dailyToggle" class="btn mobile-only" title="하루 1문장 모드" aria-label="하루 한 문장 보기">📅 오늘의 문장</button>
-        <button id="toggleList" class="btn-ghost mobile-only" title="전체 보기" aria-label="전체 보기">전체 보기</button>
         <button id="showAllBtn" class="btn-ghost" title="대현이의 매력 전체보기" aria-label="대현이의 매력 전체보기">대현이의 매력 전체보기</button>
         <button id="copyAll" class="btn-accent" title="복사하기" aria-label="전체 복사">전체 복사</button>
         <button id="shareBtn" class="btn-ghost" title="공유" aria-label="공유">공유</button>
@@ -120,15 +135,6 @@
     </section>
 
     <section class="love-note card" id="loveNote" aria-live="polite"></section>
-    <section class="card" id="dailyCard" style="display:none;">
-      <div style="display:flex; align-items:center; gap:12px;">
-        <div class="logo" aria-hidden="true" style="width:38px;height:38px;border-radius:10px;"><span>✨</span></div>
-        <div>
-          <div style="font-size:14px; color: var(--muted);">오늘의 한 문장</div>
-          <div id="dailyLine" style="font-size:clamp(16px,2.6vw,20px); font-weight:600; margin-top:4px;"></div>
-        </div>
-      </div>
-    </section>
 
     <br>
     <section class="card" id="gifCard">
@@ -238,11 +244,17 @@
     // ===== Elements =====
     const copyBtn = document.getElementById('copyAll');
     const shareBtn = document.getElementById('shareBtn');
-    const dailyBtn = document.getElementById('dailyToggle');
-    const toggleListBtn = document.getElementById('toggleList');
-    const dailyCard = document.getElementById('dailyCard');
-    const dailyLineEl = document.getElementById('dailyLine');
     const list = document.getElementById('loveList');
+    // Load saved notes
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = JSON.parse(localStorage.getItem('loveNotes') || '[]');
+  saved.forEach(text => {
+    const li = document.createElement('li');
+    li.textContent = text;
+    list.appendChild(li);
+  });
+});
+
     const listSection = document.getElementById('listSection');
     const addSentenceTool = document.getElementById('addSentenceTool');
     const addSentenceInput = document.getElementById('newSentence');
@@ -254,13 +266,23 @@
     const nextGifBtn = document.getElementById('nextGif');
 
     // Add a new sentence to the list
-      function addSentence(text){
-        const t = text.trim();
-        if (!t) return;
-        const li = document.createElement('li');
-        li.textContent = t;
-        list.appendChild(li);
-      }
+    function addSentence(text) {
+      const t = text.trim();
+      if (!t) return;
+
+      // 1️⃣ add to DOM
+      const li = document.createElement('li');
+      li.textContent = t;
+      list.appendChild(li);
+
+      // 2️⃣ save to localStorage
+      const saved = JSON.parse(localStorage.getItem('loveNotes') || '[]');
+      saved.push(t);
+      localStorage.setItem('loveNotes', JSON.stringify(saved));
+
+        // clear input
+      addSentenceInput.value = "";
+      addSentenceInput.focus();}
 
       addSentenceBtn.addEventListener('click', () => {
         addSentence(addSentenceInput.value);
@@ -288,38 +310,6 @@
     if (!('share' in navigator)) { shareBtn.style.display = 'none'; }
     else { shareBtn.addEventListener('click', async ()=>{ try{ await navigator.share({ title: document.title, text: '대현이가 짱인 이유를 모아봤어. 오늘도 사랑해! 💖', url: location.href }); } catch(e){} }); }
 
-    // ===== Daily line (deterministic per-day) =====
-    function dayOfYear(d){ const start=new Date(d.getFullYear(),0,0); return Math.floor((d-start)/86400000); }
-    function pickDailyLine(){ const items=[...list.querySelectorAll('li')]; const idx=dayOfYear(new Date())%items.length; return items[idx].textContent.trim(); }
-    function renderDaily(){ dailyLineEl.textContent = pickDailyLine(); }
-
-    // ===== Mobile first: show daily only on small screens by default =====
-    const mql = window.matchMedia('(max-width:640px)');
-    function applyMobileDefault(){
-      const wantDaily = mql.matches; // small screens
-      dailyCard.style.display = wantDaily ? 'block' : 'none';
-      list.classList.toggle('collapsed', wantDaily);
-      if (toggleListBtn) toggleListBtn.textContent = wantDaily ? '전체 보기' : '리스트 숨기기';
-      if (wantDaily) renderDaily();
-    }
-    if (toggleListBtn){
-      toggleListBtn.addEventListener('click', ()=>{
-        const collapsed = list.classList.toggle('collapsed');
-        dailyCard.style.display = collapsed ? 'block' : 'none';
-        toggleListBtn.textContent = collapsed ? '전체 보기' : '숨기기';
-        if (collapsed) renderDaily();
-      });
-    }
-    if (dailyBtn){
-      dailyBtn.addEventListener('click', ()=>{
-        const collapsed = !list.classList.contains('collapsed');
-        list.classList.toggle('collapsed', collapsed);
-        dailyCard.style.display = collapsed ? 'block' : 'none';
-        if (collapsed) renderDaily();
-      });
-    }
-    mql.addEventListener ? mql.addEventListener('change', applyMobileDefault) : mql.addListener(applyMobileDefault);
-    applyMobileDefault();
 
     const showAllBtn = document.getElementById('showAllBtn');
     const loveNote = document.getElementById('loveNote');
