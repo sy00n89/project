@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>대현이는 짱짱맨 💌</title>
+  <meta name="description" content="대현이가 짱인 이유 리스트 — 자존감 충전 러브레터 (이름 고정 + 모바일 첫 화면 오늘의 문장)" />
+  <style>
+    :root {
+      --bg: #fff9f7;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --accent: #ef476f;
+      --accent-2: #ffd166;
+      --ring: rgba(239,71,111,.25);
+      --shadow: 0 10px 30px rgba(0,0,0,.07);
+    }
+ 
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", "Pretendard", "Segoe UI", Roboto, Helvetica, Arial, "Malgun Gothic", "맑은 고딕", sans-serif;
+  background: linear-gradient(135deg, #ffdee9, #b5fffc); /* ← 첫 번째 이미지 스타일 */
+  color: var(--text);
+  line-height: 1.6;
+}
+    .container{max-width:860px;margin:0 auto;padding:24px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:18px 0 8px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),#fb7185);color:#fff;box-shadow:var(--shadow);position:relative;overflow:hidden}
+    .logo::after{content:"";position:absolute;inset:-30% -30%;background:radial-gradient(300px 200px at 30% 30%,rgba(255,255,255,.25),transparent 55%);transform:rotate(15deg)}
+    .logo span{font-size:26px}
+    h1{margin:0;font-size:clamp(22px,4vw,34px);letter-spacing:-.02em}
+    .sub{color:var(--muted);font-size:14px;margin-top:4px}
+    .toolbar{display:flex;flex-wrap:wrap;gap:10px}
+    button{appearance:none;border:none;background:var(--card);color:var(--text);padding:10px 14px;border-radius:12px;box-shadow:var(--shadow);cursor:pointer;transition:transform .04s ease, box-shadow .2s ease, background .2s ease;outline:2px solid transparent;outline-offset:2px}
+    button:hover{transform:translateY(-1px)}
+    button:focus-visible{outline-color:var(--accent)}
+    .btn-accent{background:linear-gradient(135deg,var(--accent),#fb7185);color:#fff}
+    .btn-ghost{background:transparent;border:1px solid rgba(0,0,0,.08)}
+    .card{background:var(--card);border-radius:18px;padding:clamp(16px,3vw,28px);box-shadow:var(--shadow)}
+    .intro{margin:18px 0 22px}.intro p{margin:0}
+    ol.love-list{counter-reset:love;list-style:none;padding:0;margin:0;display:grid;gap:12px}
+    ol.love-list li{counter-increment:love;position:relative;padding:14px 16px 14px 56px;border-radius:14px;background:linear-gradient(180deg,rgba(0,0,0,.02),transparent 35%);border:1px solid rgba(0,0,0,.06)}
+    ol.love-list li::before{content:counter(love);position:absolute;left:14px;top:12px;width:32px;height:32px;border-radius:10px;display:grid;place-items:center;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--accent),#fb7185);box-shadow:0 6px 16px var(--ring)}
+    .footer{margin-top:24px;color:var(--muted);font-size:12px;text-align:center}
+
+    /* Always hide when collapsed (not just on mobile) */
+#loveList.collapsed { display: none; }
+
+/* Cute love letter card */
+.love-note{
+  position: relative;
+  padding: 20px 22px 22px 22px;
+  background: linear-gradient(180deg,#fff,#fff7fb);
+  border: 1px solid rgba(0,0,0,.06);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+}
+.love-note::before{
+  content:"DaeDan Daehyun 💌";
+  position:absolute; top:10px; right:14px;
+  font-size:12px; color:var(--muted);
+}
+.love-note .note-title{
+  font-weight:700; font-size:16px; margin-bottom:8px;
+  display:flex; align-items:center; gap:8px;
+}
+.love-note .note-body{
+  padding:14px;
+  border-radius:12px;
+  background: repeating-linear-gradient(#fff 0 28px, #fff 0 28px),
+              linear-gradient(180deg,#fff,#fff);
+  border:1px dashed rgba(239,71,111,.35);
+}
+
+.gif-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.gif-wrap{display:grid;place-items:center;min-height:180px;border-radius:14px;overflow:hidden}
+.gif-wrap img{width:100%;height:auto;display:block}
+
+
+
+    /* 모바일: 첫 화면에서 오늘의 문장 우선 표시 */
+    .mobile-only{display:none}
+    @media (max-width:640px){
+      #loveList.collapsed{display:none}
+      .mobile-only{display:inline-block}
+    }
+
+    @media print{body{background:#fff}.toolbar,.logo::after{display:none!important}.card{box-shadow:none}button{display:none}.footer{display:none}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true"><span>⭐️</span></div>
+        <div>
+          <h1><span id="bfName">대현이</span>는 짱짱맨</h1>
+          <div class="sub">항상 멋지고 고마운, <span id="bfNameSub">대현이</span>가 대단한 이유들:</div>
+        </div>
+      </div>
+      <div class="toolbar">
+        <button id="dailyToggle" class="btn mobile-only" title="하루 1문장 모드" aria-label="하루 한 문장 보기">📅 오늘의 문장</button>
+        <button id="toggleList" class="btn-ghost mobile-only" title="전체 보기" aria-label="전체 보기">전체 보기</button>
+        <button id="showAllBtn" class="btn-ghost" title="대현이의 매력 전체보기" aria-label="대현이의 매력 전체보기">대현이의 매력 전체보기</button>
+        <button id="copyAll" class="btn-accent" title="복사하기" aria-label="전체 복사">전체 복사</button>
+        <button id="shareBtn" class="btn-ghost" title="공유" aria-label="공유">공유</button>
+        <button onclick="window.print()" class="btn-ghost" title="인쇄/저장" aria-label="인쇄">PDF 저장</button>
+      </div>
+    </header>
+
+    <section class="intro card" id="intro">
+      <p>
+        오늘도 아자! 이건 내가 매일 느끼는 <strong>오빠의 장점</strong>들이야. <br>
+        오빠가 언제든지 힘이 필요할 때 들어와서 오빠의 대단한 능력을 충전하고 갔으면 좋겠어!
+      </p>
+    </section>
+
+    <section class="love-note card" id="loveNote" aria-live="polite"></section>
+    <section class="card" id="dailyCard" style="display:none;">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="logo" aria-hidden="true" style="width:38px;height:38px;border-radius:10px;"><span>✨</span></div>
+        <div>
+          <div style="font-size:14px; color: var(--muted);">오늘의 한 문장</div>
+          <div id="dailyLine" style="font-size:clamp(16px,2.6vw,20px); font-weight:600; margin-top:4px;"></div>
+        </div>
+      </div>
+    </section>
+
+    <br>
+    <section class="card" id="gifCard">
+      <div class="gif-head">
+        <span>힘 내라 얍</span>
+        <button id="nextGif" class="btn-ghost" type="button">다른 GIF 보기</button>
+      </div>
+      <div id="gifWrap" class="gif-wrap" aria-live="polite"></div>
+    </section>
+
+
+    <section class="card" id="listSection">
+      <!-- Add New Sentence Tool (starts hidden) -->
+  <div id="addSentenceTool" style="display:none; gap:8px; margin-bottom:12px; display:none;">
+    <input id="newSentence" type="text" placeholder="새로 발견한 대현이의 장점"
+           style="flex:1; padding:10px 12px; border-radius:10px; border:1px solid rgba(0,0,0,.12); outline:none;">
+    <button id="addSentenceBtn" class="btn-accent" type="button">추가</button>
+  </div>
+      <ol class="love-list" id="loveList">
+        <li>계획을 세우고 차근차근 실천할 줄 아는 사람이라 늘 믿음이 가.</li>
+        <li>한 순간도 헛되이 쓰지 않으려는 부지런함이 정말 멋져.</li>
+        <li>항상 상대방의 입장에서 생각해보려는 따뜻한 배려심이 있어.</li>
+        <li>다른 사람을 섣불리 판단하지 않으려는 열린 마음이 멋져.</li>
+        <li>“그럴 수도 있지” 하면서 이해하려는 포용력이 대단해.</li>
+        <li>자신의 단점을 정확하게 바라볼 줄 아는 솔직함이 있어.</li>
+        <li>누군가의 지적도 겸허하게 받아들이는 겸손함이 있어.</li>
+        <li>늘 발전하려고 노력하는 자기계발형 인간이라 존경스러워.</li>
+        <li>요리를 뚝딱 해내는 손재주가 있어서 언제나 든든해.</li>
+        <li>위생관념이 철저해서 같이 생활해도 편하고 기분 좋아.</li>
+        <li>남들이 뭐라 해도 본인이 아끼는 사람과 가치관을 우선하는 단단함이 멋져.</li>
+        <li>좋은 경험이 있으면 꼭 소중한 사람들과 나누는 나눔의 마음이 있어.</li>
+        <li>화가 나는 상황에서도 한 박자 쉬고 돌아볼 줄 아는 어른스러움이 있어.</li>
+        <li>언성을 높이지 않으려는 차분함이 매력적이야.</li>
+        <li>문제가 생기면 끝까지 파고들어 해결하는 끈기가 대단해.</li>
+        <li>옳고 그름이 분명해서 믿고 의지할 수 있어.</li>
+        <li>필요할 땐 자기 주장을 확실히 세울 줄 아는 강한 내면이 있어.</li>
+        <li>힘들어도 책임을 다하는 성실함이 존경스러워.</li>
+        <li>어려움 속에서도 좌절하지 않고 발전하려는 긍정적인 힘이 있어.</li>
+        <li>나를 정말 존중해주는 모습이 너무 고마워.</li>
+        <li>나랑 한 약속은 무조건 지키는 신뢰감이 있어.</li>
+        <li>내가 부탁했던 것들을 잊지 않고 꼭 해주는 세심함이 있어.</li>
+        <li>나보다 나를 더 배려해주는 사랑이 있어.</li>
+        <li>진지할 때 나오는 낮고 차분한 목소리가 설레.</li>
+        <li>순간 몰입해서 집중하는 모습이 너무 멋있어.</li>
+        <li>작은 일에도 책임감을 갖고 최선을 다하는 모습이 감동적이야.</li>
+        <li>주변 사람을 챙기는 디테일이 남다르다.</li>
+        <li>나를 웃게 하는 타이밍이 놀라울 만큼 정확해.</li>
+        <li>힘든 얘기도 편하게 털어놓을 수 있는 안정감을 줘.</li>
+        <li>대화할 때 진심으로 들어주는 경청 능력이 최고야.</li>
+        <li>내가 힘들 때 말 한마디로 기운 나게 해주는 힘이 있어.</li>
+        <li>사소한 일에도 고마움을 표현할 줄 아는 사람이라 좋아.</li>
+        <li>내가 좋아하는 음식을 알아서 챙겨주는 센스가 있어.</li>
+        <li>중요한 순간에 나보다 나를 더 믿어주는 든든함이 있어.</li>
+        <li>자신이 모르는 건 솔직하게 말하는 용기가 있어.</li>
+        <li>실수를 인정하고 더 나아지려는 태도가 멋져.</li>
+        <li>내가 뭘 좋아하는지 기억해주고 챙겨주는 세심함이 있어.</li>
+        <li>함께 있으면 안정감이 느껴져.</li>
+        <li>힘들 때 나를 먼저 챙겨주는 우선순위가 감동이야.</li>
+        <li>매일 조금씩 발전하려는 꾸준함이 있어.</li>
+        <li>스트레스가 많아도 버티고 나아가는 힘이 대단해.</li>
+        <li>상황이 복잡해도 감정에 휘둘리지 않고 판단하는 냉철함이 있어.</li>
+        <li>중요한 일을 미루지 않고 제때 해내는 성실함이 있어.</li>
+        <li>필요한 순간에 농담을 던져서 분위기를 살리는 유머감각이 있어.</li>
+        <li>내가 좋아하는 취향을 존중해주는 태도가 고마워.</li>
+        <li>내 이야기를 끝까지 들어주는 인내심이 있어.</li>
+        <li>다른 사람의 감정을 잘 읽는 눈치가 있어.</li>
+        <li>스스로를 과대평가하지 않는 겸손함이 있어.</li>
+        <li>중요한 순간에 냉정함과 따뜻함을 동시에 보여줄 줄 알아.</li>
+        <li>목표를 향해 달려가는 모습이 나에게도 동기부여가 돼.</li>
+        <li>내 생각을 존중하고 반영해주는 협력적인 태도가 있어.</li>
+        <li>내가 하는 걸 응원해주는 든든한 지원군이야.</li>
+        <li>필요할 땐 단호하게 행동하는 결단력이 있어.</li>
+        <li>아무리 바빠도 연락을 잊지 않는 성의가 있어.</li>
+        <li>나를 세상에서 제일 소중하게 생각해주는 마음이 느껴져.</li>
+        <li>나를 위한 일이라면 기꺼이 시간을 내주는 헌신이 있어.</li>
+        <li>나의 단점도 사랑해주는 포용력이 있어.</li>
+        <li>힘든 하루를 웃게 만드는 위로를 해줄 줄 알아.</li>
+        <li>내가 부족한 부분을 메워주는 보완력이 있어.</li>
+        <li>원칙과 규칙을 지키면서도 유연성을 잃지 않아.</li>
+        <li>말보다 행동으로 사랑을 표현할 줄 알아.</li>
+        <li>소중한 걸 지키기 위해 노력하는 보호 본능이 있어.</li>
+        <li>나를 웃게 만들려고 작은 이벤트를 준비해주는 정성이 있어.</li>
+        <li>함께 있으면 내가 더 좋은 사람이 되고 싶어져.</li>
+        <li>사소한 일에도 성실하게 임하는 자세가 좋아.</li>
+        <li>내 이야기에 반응이 진심이라서 대화가 즐거워.</li>
+        <li>다른 사람의 성장을 기뻐해줄 줄 아는 마음이 있어.</li>
+        <li>스스로를 발전시키는 데 두려움이 없어.</li>
+        <li>인내심이 길어서 웬만한 일에는 흔들리지 않아.</li>
+        <li>내가 힘들 때 나를 안심시키는 목소리가 있어.</li>
+        <li>어떤 상황에서도 신뢰할 수 있는 책임감이 있어.</li>
+        <li>나를 믿어주는 눈빛이 있어.</li>
+        <li>매사에 진심을 다하는 태도가 좋아.</li>
+        <li>나를 위해 시간을 아끼지 않는 사람이야.</li>
+        <li>세상 누구보다 내 편이 돼주는 사람이라서 좋아.</li>
+        <li>오빠는 오빠 자체로 이미 완벽해.</li>
+      </ol>
+    </section>
+
+    <p class="footer">© 2025 From Siwoo. 대현이가 짱짱맨이 아니어도 사랑해 💖</p>
+  </div>
+
+  <script>
+
+    const GIPHY_KEY = "Z5w5f2ajKkd097y9CsFnJBJynYjPE25Q"; // paste your key
+    const GIPHY_ENDPOINT = "https://api.giphy.com/v1/gifs/search";
+
+    // ===== Elements =====
+    const copyBtn = document.getElementById('copyAll');
+    const shareBtn = document.getElementById('shareBtn');
+    const dailyBtn = document.getElementById('dailyToggle');
+    const toggleListBtn = document.getElementById('toggleList');
+    const dailyCard = document.getElementById('dailyCard');
+    const dailyLineEl = document.getElementById('dailyLine');
+    const list = document.getElementById('loveList');
+    const listSection = document.getElementById('listSection');
+    const addSentenceTool = document.getElementById('addSentenceTool');
+    const addSentenceInput = document.getElementById('newSentence');
+    const addSentenceBtn   = document.getElementById('addSentenceBtn');
+
+
+    const gifCard  = document.getElementById('gifCard');
+    const gifWrap  = document.getElementById('gifWrap');
+    const nextGifBtn = document.getElementById('nextGif');
+
+    // Add a new sentence to the list
+      function addSentence(text){
+        const t = text.trim();
+        if (!t) return;
+        const li = document.createElement('li');
+        li.textContent = t;
+        list.appendChild(li);
+      }
+
+      addSentenceBtn.addEventListener('click', () => {
+        addSentence(addSentenceInput.value);
+        addSentenceInput.value = "";
+        addSentenceInput.focus();
+      });
+
+      // Press Enter to add
+      addSentenceInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          addSentenceBtn.click();
+        }
+      });
+
+    // ===== Copy all =====
+    copyBtn.addEventListener('click', async () => {
+      const items = [...document.querySelectorAll('#loveList li')].map(li => `• ${li.textContent.trim()}`);
+      const title = `${document.getElementById('bfName').textContent}는 짱인 이유`;
+      const text = `${title}\n\n` + items.join('\n');
+      try{ await navigator.clipboard.writeText(text); copyBtn.textContent='복사 완료!'; setTimeout(()=>copyBtn.textContent='전체 복사',1500);}catch(e){ alert('복사에 실패했어요. 다시 시도해줘!'); }
+    });
+
+    // ===== Share =====
+    if (!('share' in navigator)) { shareBtn.style.display = 'none'; }
+    else { shareBtn.addEventListener('click', async ()=>{ try{ await navigator.share({ title: document.title, text: '대현이가 짱인 이유를 모아봤어. 오늘도 사랑해! 💖', url: location.href }); } catch(e){} }); }
+
+    // ===== Daily line (deterministic per-day) =====
+    function dayOfYear(d){ const start=new Date(d.getFullYear(),0,0); return Math.floor((d-start)/86400000); }
+    function pickDailyLine(){ const items=[...list.querySelectorAll('li')]; const idx=dayOfYear(new Date())%items.length; return items[idx].textContent.trim(); }
+    function renderDaily(){ dailyLineEl.textContent = pickDailyLine(); }
+
+    // ===== Mobile first: show daily only on small screens by default =====
+    const mql = window.matchMedia('(max-width:640px)');
+    function applyMobileDefault(){
+      const wantDaily = mql.matches; // small screens
+      dailyCard.style.display = wantDaily ? 'block' : 'none';
+      list.classList.toggle('collapsed', wantDaily);
+      if (toggleListBtn) toggleListBtn.textContent = wantDaily ? '전체 보기' : '리스트 숨기기';
+      if (wantDaily) renderDaily();
+    }
+    if (toggleListBtn){
+      toggleListBtn.addEventListener('click', ()=>{
+        const collapsed = list.classList.toggle('collapsed');
+        dailyCard.style.display = collapsed ? 'block' : 'none';
+        toggleListBtn.textContent = collapsed ? '전체 보기' : '숨기기';
+        if (collapsed) renderDaily();
+      });
+    }
+    if (dailyBtn){
+      dailyBtn.addEventListener('click', ()=>{
+        const collapsed = !list.classList.contains('collapsed');
+        list.classList.toggle('collapsed', collapsed);
+        dailyCard.style.display = collapsed ? 'block' : 'none';
+        if (collapsed) renderDaily();
+      });
+    }
+    mql.addEventListener ? mql.addEventListener('change', applyMobileDefault) : mql.addListener(applyMobileDefault);
+    applyMobileDefault();
+
+    const showAllBtn = document.getElementById('showAllBtn');
+    const loveNote = document.getElementById('loveNote');
+
+    function renderRandomNote(){
+  const items = [...list.querySelectorAll('li')];
+  if (!items.length) return;
+  const rand = Math.floor(Math.random() * items.length);
+  const text = items[rand].textContent.trim();
+  loveNote.innerHTML = `
+    <div class="note-title">오늘의 멋짐 <span>💗</span></div>
+    <div class="note-body">${text}</div>
+  `;
+}
+
+list.classList.add('collapsed');
+listSection.style.display = 'none';
+loveNote.style.display = 'block';
+renderRandomNote();
+
+gifCard.style.display = 'block';
+fetchGiphyGif("I'm amazing");
+
+
+showAllBtn.addEventListener('click', () => {
+  const collapsed = list.classList.contains('collapsed');
+  if (collapsed) {
+    list.classList.remove('collapsed');     // show list
+    listSection.style.display = 'block';   // show whole card
+    loveNote.style.display = 'none';        // hide letter
+    gifCard.style.display = 'none';                  // HIDE GIFS when list is visible
+    addSentenceTool.style.display = 'flex';     // ← show tool
+    showAllBtn.textContent = '리스트 숨기기';
+  } else {
+    list.classList.add('collapsed');        // hide list
+    listSection.style.display = 'none';    // hide whole card (removes empty box)
+    loveNote.style.display = 'block';       // show letter again
+    gifCard.style.display = 'block';                 // SHOW GIFS in random mode
+    addSentenceTool.style.display = 'none';     // ← hide tool
+    renderRandomNote();                     // pick a fresh one
+    fetchGiphyGif("I am the best");                  // refresh GIF, too
+    showAllBtn.textContent = '대현이의 매력 전체보기';
+  }
+});
+
+
+// get one random GIF for the query by randomizing the search offset
+async function fetchGiphyGif(query = "I am the best"){
+  const offset = Math.floor(Math.random() * 50); // random page slice
+  const params = new URLSearchParams({
+    api_key: GIPHY_KEY,
+    q: query,
+    limit: "1",
+    offset: String(offset),
+    rating: "pg-13",
+    lang: "en",
+    bundle: "messaging_non_clips"
+  });
+
+  gifWrap.innerHTML = "<div style='opacity:.6;padding:16px'>불러오는 중…</div>";
+
+  try{
+    const res = await fetch(`${GIPHY_ENDPOINT}?${params.toString()}`);
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    const item = data?.data?.[0];
+    if(!item) throw new Error("No results");
+
+    const url =
+      item.images?.downsized_medium?.url ||
+      item.images?.original?.url;
+
+    const alt = item.title || "힘 내라 얍";
+    gifWrap.innerHTML = `<img src="${url}" alt="${alt}" loading="lazy">`;
+  }catch(err){
+    console.warn("GIPHY fetch failed:", err);
+    gifWrap.innerHTML = "<div style='opacity:.6;padding:16px'>GIF를 가져오지 못했어요. 다시 시도해줘!</div>";
+  }
+}
+
+nextGifBtn.addEventListener('click', () => fetchGiphyGif("I am the best"));
+
+
+
+  </script>
+</body>
+</html>
